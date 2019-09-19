@@ -5,25 +5,29 @@ using UnityEngine;
 public class ButtleState : MonoBehaviour
 {
     private static ButtleState instance;
+    private static GameObject obj;
     public static ButtleState Instance
     {
         get
         {
             if (instance == null)
             {
-                GameObject obj = new GameObject("ButtleState");
+                obj = new GameObject("ButtleState");
                 instance = obj.AddComponent<ButtleState>();
+                Debug.Log("created");
             }
             return instance;
         }
     }
 
-    [SerializeField] float baseInterval = 0.5f;
-    public int posingTimes = 5;
+    [SerializeField] float baseInterval = 0.8f;
     public float interval;
+    public int posingTimes = 5;
     public int turn = 0;
     public int combo = 0;
     public bool isPlayerTurn = false;
+    public bool isEnemyTurn = true;
+    public bool isStop = false;
     List<string> motionType = new List<string>()
     {
         "UP",
@@ -42,6 +46,7 @@ public class ButtleState : MonoBehaviour
     private void Awake()
     {
         interval = baseInterval;
+        motionTypes = new List<string>();
     }
 
     void Start()
@@ -78,6 +83,11 @@ public class ButtleState : MonoBehaviour
             motionTypes.Add(motionType[(int)Random.Range(0, motionType.Count-1)]);
         }
 
+    }
+
+    public void Delete()
+    {
+        Destroy(obj);
     }
 
 }

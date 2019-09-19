@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] int MaxMp = 200;
     // Start is called before the first frame update
     void Start()
     {

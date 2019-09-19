@@ -22,8 +22,7 @@ public class ButtleManager : MonoBehaviour
     {
         if (PlayerInput.direction != "idle")
         {
-            ButtleState.Instance.turn++;
-            ButtleState.Instance.StateUpdate();
+            ButtleState.Instance.Delete();
         }
     }
 }

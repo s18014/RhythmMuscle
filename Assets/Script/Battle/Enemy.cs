@@ -8,8 +8,10 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] int MaxMP = 100;
     [SerializeField] Text testText;
-    int posingTimes;
+    int posingCount;
     int MP;
+    bool isStart = false;
+    float time;
 
     private void Awake()
     {
@@ -24,9 +26,37 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        while (!ButtleState.Instance.isPlayerTurn)
+        if (ButtleState.Instance.isEnemyTurn)
         {
-            
+            // 初期化処理
+            if (!isStart)
+            {
+                posingCount = 0;
+                time = 0;
+                ButtleState.Instance.GenerateMotion();
+                isStart = true;
+            }
+
+            time += Time.deltaTime;
+            // 一定間隔でポージング
+            if (posingCount * ButtleState.Instance.interval < time)
+            {
+                testText.text = ButtleState.Instance.motionTypes[posingCount];
+
+                // TODO: ポージングのアニメーション
+                // TODO: 音
+
+                posingCount++;
+            }
+
+            // 終了判定
+            if (posingCount >= ButtleState.Instance.posingTimes)
+            {
+                ButtleState.Instance.isEnemyTurn = false;
+                isStart = false;
+            }
+
+
         }
     }
 }
