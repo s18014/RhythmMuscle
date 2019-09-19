@@ -20,9 +20,11 @@ public class ButtleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PlayerInput.direction != "idle")
+        if (PlayerInput.touched)
         {
-            ButtleState.Instance.Delete();
+            ButtleState.Instance.GenerateNotes();
+            ButtleState.Instance.GenerateMotion();
+            ButtleState.Instance.isPlayerTurn = true;
         }
     }
 }

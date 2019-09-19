@@ -21,25 +21,28 @@ public class ButtleState : MonoBehaviour
     }
 
     [SerializeField] float baseInterval = 0.8f;
+    [SerializeField] float minInterval = 0.15f;
+    [SerializeField] float decreaseRatio = 0.3f;
     public float interval;
     public int posingTimes = 5;
     public int turn = 0;
     public int combo = 0;
     public bool isPlayerTurn = false;
-    public bool isEnemyTurn = true;
+    public bool isEnemyTurn = false;
     public bool isStop = false;
     List<string> motionType = new List<string>()
     {
-        "UP",
-        "DOWN",
-        "RIGHT",
-        "LEFT"
+        "up",
+        "down",
+        "right",
+        "left"
     };
     public List<string> motionTypes
     {
         get;
         private set;
     }
+    public List<PosingNote> notes = new List<PosingNote>();
  
     // Start is called before the first frame update
 
@@ -59,19 +62,13 @@ public class ButtleState : MonoBehaviour
     {
     }
 
-    public void Initialize()
+    public void AddTurn()
     {
-        turn = 0;
-        combo = 0;
-    }
-
-    public void StateUpdate()
-    {
+        turn++;
         // 状態を更新
-        float decreaseRatio = (1 - turn * 0.02f);
-        if (decreaseRatio < 0.3f) decreaseRatio = 0.3f;
-        interval = decreaseRatio * baseInterval;
-        Debug.Log(interval);
+        float ratio = (1 - turn * decreaseRatio);
+        interval = ratio * baseInterval;
+        if (interval < minInterval) interval = minInterval;
     }
 
     public void GenerateMotion()
@@ -90,4 +87,9 @@ public class ButtleState : MonoBehaviour
         Destroy(obj);
     }
 
+    public void GenerateNotes()
+    {
+        // posingTimes分Noteの作成
+        notes = NoteGenerator.Generate(posingTimes, interval);
+    }
 }

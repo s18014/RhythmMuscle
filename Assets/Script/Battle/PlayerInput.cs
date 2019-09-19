@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerInput : MonoBehaviour
 {
-    // Start is called before the first frame update
     Vector3 touchStartPos;
     Vector3 touchEndPos;
     public static string direction
@@ -14,11 +13,19 @@ public class PlayerInput : MonoBehaviour
         private set;
     }
 
+    public static bool touched
+    {
+        get;
+        private set;
+    }
+
     private void Awake()
     {
         direction = "idle";
+        touched = false;
     }
 
+    // Start is called before the first frame update
     void Start()
     {
     }
@@ -27,15 +34,12 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         Flick();
-        if (direction != "idle")
-        {
-            Debug.Log(direction);
-        }
     }
 
     void Flick()
     {
         direction = "idle";
+        touched = false;
      	if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 touchStartPos = new Vector3(Input.mousePosition.x,
@@ -79,8 +83,8 @@ public class PlayerInput : MonoBehaviour
 				direction = "down";
 			}
 		} else {
-			//タッチを検出
-			direction = "touch";
+            //タッチを検出
+            touched = true;
 		}
 		switch (direction) {
 		case "up":

@@ -5,17 +5,18 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-
     [SerializeField] int MaxMP = 100;
     [SerializeField] Text testText;
     int posingCount;
     int MP;
     bool isStart = false;
     float time;
+    AudioSource audio;
 
     private void Awake()
     {
         MP = MaxMP;
+        audio = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
@@ -33,27 +34,35 @@ public class Enemy : MonoBehaviour
             {
                 posingCount = 0;
                 time = 0;
-                ButtleState.Instance.GenerateMotion();
                 isStart = true;
             }
 
             time += Time.deltaTime;
-            // 一定間隔でポージング
-            if (posingCount * ButtleState.Instance.interval < time)
+            float posingTime = (posingCount + 1) * ButtleState.Instance.interval;
+            // ポージングの回数判定
+            if (posingCount < ButtleState.Instance.posingTimes)
             {
-                testText.text = ButtleState.Instance.motionTypes[posingCount];
+                // 一定間隔でポージング
+                if (posingTime < time)
+                {
+                    Debug.Log(time);
+                    Debug.Log(ButtleState.Instance.notes[posingCount].posingType);
 
-                // TODO: ポージングのアニメーション
-                // TODO: 音
+                    // TODO: ポージングのアニメーション
+                    // TODO: 音
+                    audio.Play();
 
-                posingCount++;
+                    posingCount++;
+                }
             }
 
-            // 終了判定
-            if (posingCount >= ButtleState.Instance.posingTimes)
+            // 終了判定 １サイクル分　余韻を作っている
+            if ((ButtleState.Instance.posingTimes + 1) * ButtleState.Instance.interval <= time)
             {
+                Debug.Log(time);
                 ButtleState.Instance.isEnemyTurn = false;
                 isStart = false;
+                ButtleState.Instance.AddTurn();
             }
 
 
