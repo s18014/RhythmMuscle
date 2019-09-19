@@ -5,9 +5,18 @@ using UnityEngine.UI;
 
 public class PlayerInput : MonoBehaviour
 {
+
+    public enum DirectionType
+    {
+        UP,
+        DOWN,
+        RIGHT,
+        LEFT,
+        IDLE
+    }
     Vector3 touchStartPos;
     Vector3 touchEndPos;
-    public static string direction
+    public static DirectionType direction
     {
         get;
         private set;
@@ -21,7 +30,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Awake()
     {
-        direction = "idle";
+        direction = DirectionType.IDLE;
         touched = false;
     }
 
@@ -38,7 +47,7 @@ public class PlayerInput : MonoBehaviour
 
     void Flick()
     {
-        direction = "idle";
+        direction = DirectionType.IDLE;
         touched = false;
      	if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -65,48 +74,26 @@ public class PlayerInput : MonoBehaviour
 		if (Mathf.Abs (directionY) < Mathf.Abs (directionX)) {
 			if (30 < directionX) {
 				//右向きにフリック
-				direction = "right";
+				direction = DirectionType.RIGHT;
 
 			} 
 			if (-30 > directionX) {
 				//左向きにフリック
-				direction = "left";
+				direction = DirectionType.LEFT;
 			}
 			//yがxより絶対値が大きい時。
 		} else if (Mathf.Abs (directionX) < Mathf.Abs (directionY)) {
 			if (30 < directionY) {
 				//上向きにフリック
-				direction = "up";
+				direction = DirectionType.UP;
 			}
 			if (-30 > directionY) {
 				//下向きのフリック
-				direction = "down";
+				direction = DirectionType.DOWN;
 			}
 		} else {
             //タッチを検出
             touched = true;
 		}
-		switch (direction) {
-		case "up":
-			//上フリックされた時の処理
-			break;
-
-		case "down":
-			//下フリックされた時の処理
-			break;
-
-		case "right":
-			//右フリックされた時の処理
-			break;
-
-		case "left":
-			//左フリックされた時の処理
-			break;
-
-		case "touch":
-			//タッチされた時の処理
-			break;
-		}
-
 	}
 }

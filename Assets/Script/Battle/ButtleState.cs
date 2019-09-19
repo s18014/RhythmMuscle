@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class ButtleState : MonoBehaviour
@@ -20,36 +21,32 @@ public class ButtleState : MonoBehaviour
         }
     }
 
-    [SerializeField] float baseInterval = 0.8f;
+    [SerializeField] float baseInterval = 1.5f;
     [SerializeField] float minInterval = 0.15f;
     [SerializeField] float decreaseRatio = 0.3f;
+    [SerializeField] float baseRestTime = 3f;
     public float interval;
-    public int posingTimes = 5;
     public int turn = 0;
     public int combo = 0;
     public bool isPlayerTurn = false;
+    public bool isPlayerTurnEnd = false;
     public bool isEnemyTurn = false;
+    public bool isEnemyTurnEnd = false;
     public bool isStop = false;
-    List<string> motionType = new List<string>()
-    {
-        "up",
-        "down",
-        "right",
-        "left"
-    };
-    public List<string> motionTypes
-    {
-        get;
-        private set;
-    }
-    public List<PosingNote> notes = new List<PosingNote>();
+    public bool isButtleStart = false;
+    public bool isGameClear = false;
+    public bool isGameOver = false;
+    public bool isGameEnd = false;
+    public bool isPlayerInit = false;
+    public float time;
+    public float restTime;
+    public PlayerInput.DirectionType directionType;
  
     // Start is called before the first frame update
 
     private void Awake()
     {
         interval = baseInterval;
-        motionTypes = new List<string>();
     }
 
     void Start()
@@ -71,25 +68,15 @@ public class ButtleState : MonoBehaviour
         if (interval < minInterval) interval = minInterval;
     }
 
-    public void GenerateMotion()
-    {
-        // posingTimes分ポーズの作成
-        motionTypes.Clear();
-        for (int i = 0; i < posingTimes; i++)
-        {
-            motionTypes.Add(motionType[(int)Random.Range(0, motionType.Count-1)]);
-        }
-
-    }
 
     public void Delete()
     {
         Destroy(obj);
     }
 
-    public void GenerateNotes()
+    public void nextDirection()
     {
-        // posingTimes分Noteの作成
-        notes = NoteGenerator.Generate(posingTimes, interval);
+        int r = UnityEngine.Random.Range(0, 4);
+        directionType = (PlayerInput.DirectionType)Enum.ToObject(typeof(PlayerInput.DirectionType), r);
     }
 }

@@ -5,18 +5,21 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] int MaxMP = 100;
-    [SerializeField] Text testText;
+    [SerializeField] float MaxMP = 100f;
+    [SerializeField] float recoveryPoint = 30f;
+    [SerializeField] Slider MPBar;
     int posingCount;
-    int MP;
+    float MP;
     bool isStart = false;
     float time;
     AudioSource audio;
+    ButtleState buttleState;
 
     private void Awake()
     {
         MP = MaxMP;
         audio = GetComponent<AudioSource>();
+        buttleState = ButtleState.Instance;
     }
 
     // Start is called before the first frame update
@@ -26,6 +29,24 @@ public class Enemy : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        MPBar.value = MP / MaxMP;
+        Recover();
+    }
+
+    void Recover()
+    {
+        if (MP <= 0) return;
+        MP += recoveryPoint * Time.deltaTime;
+        if (MP >= MaxMP) MP = MaxMP;
+    }
+
+    public bool isDead()
+    {
+        return MP <= 0f;
+    }
+    /*
+    void RhythmPatern()
     {
         if (ButtleState.Instance.isEnemyTurn)
         {
@@ -64,8 +85,41 @@ public class Enemy : MonoBehaviour
                 isStart = false;
                 ButtleState.Instance.AddTurn();
             }
+        }
+    }
+    */
 
+    public float getMP()
+    {
+        return MP;
+    }
 
+    public void ApplyDamage(float damage)
+    {
+        MP -= damage;
+        if (MP < 0)
+        {
+            MP = 0;
+            buttleState.isGameClear = true;
+        }
+
+        Debug.Log("敵がダメージ");
+    }
+
+    public void DoPosing(PlayerInput.DirectionType direction)
+    {
+        switch(direction)
+        {
+            case PlayerInput.DirectionType.UP:
+                break;
+            case PlayerInput.DirectionType.DOWN:
+                break;
+            case PlayerInput.DirectionType.RIGHT:
+                break;
+            case PlayerInput.DirectionType.LEFT:
+                break;
+            default:
+                break;
         }
     }
 }
