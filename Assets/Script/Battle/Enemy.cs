@@ -12,14 +12,17 @@ public class Enemy : MonoBehaviour
     float MP;
     bool isStart = false;
     float time;
+    public bool init = false;
     AudioSource audio;
     ButtleState buttleState;
+    PosingController posingController;
 
     private void Awake()
     {
         MP = MaxMP;
         audio = GetComponent<AudioSource>();
         buttleState = ButtleState.Instance;
+        posingController = GetComponent<PosingController>();
     }
 
     // Start is called before the first frame update
@@ -31,7 +34,6 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         MPBar.value = MP / MaxMP;
-        Recover();
     }
 
     void Recover()
@@ -111,12 +113,19 @@ public class Enemy : MonoBehaviour
         switch(direction)
         {
             case PlayerInput.DirectionType.UP:
+                posingController.Up();
                 break;
             case PlayerInput.DirectionType.DOWN:
+                posingController.Down();
                 break;
             case PlayerInput.DirectionType.RIGHT:
+                posingController.Right();
                 break;
             case PlayerInput.DirectionType.LEFT:
+                posingController.Left();
+                break;
+            case PlayerInput.DirectionType.IDLE:
+                posingController.Idle();
                 break;
             default:
                 break;

@@ -37,8 +37,10 @@ public class ButtleState : MonoBehaviour
     public bool isGameClear = false;
     public bool isGameOver = false;
     public bool isGameEnd = false;
-    public bool isPlayerInit = false;
+    public bool initilized = false;
+    public bool isCycleEnd = false;
     public float time;
+    public float enemyPosingTime;
     public float restTime;
     public PlayerInput.DirectionType directionType;
  

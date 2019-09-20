@@ -8,8 +8,9 @@ public class ButtleManager : MonoBehaviour
     [SerializeField] Enemy enemy;
     [SerializeField] Player player;
     [SerializeField] Text comboText;
-    [SerializeField] Text enemyStateText;
     [SerializeField] Slider restTimeBar;
+    [SerializeField] Text startText;
+    SceneLoader sceneLoader;
     ButtleState buttleState;
     Score score;
     // Start is called before the first frame update
@@ -17,6 +18,7 @@ public class ButtleManager : MonoBehaviour
     private void Awake()
     {
         buttleState = ButtleState.Instance;
+        sceneLoader = GetComponent<SceneLoader>();
     }
 
     void Start()
@@ -28,50 +30,66 @@ public class ButtleManager : MonoBehaviour
     {
         CheckGameState();
         TextUpdate();
-        if (PlayerInput.touched)
+        if (!buttleState.isButtleStart)
         {
-            if (!buttleState.isButtleStart)
+            if (PlayerInput.touched)
             {
+                startText.text = "";
                 buttleState.isButtleStart = true;
                 buttleState.nextDirection();
                 buttleState.isEnemyTurn = true;
             }
         }
 
-        if (buttleState.isEnemyTurnEnd)
+        if (buttleState.isGameClear)
         {
-            enemy.DoPosing(PlayerInput.DirectionType.IDLE);
-            buttleState.isPlayerTurn = true;
-            buttleState.isEnemyTurnEnd = false;
+            // TODO: リザルト画面へ
         }
 
-        if (buttleState.isPlayerTurnEnd)
+        if (buttleState.isGameOver)
         {
-            buttleState.isEnemyTurn = true;
-            buttleState.isPlayerTurnEnd = false;
-            buttleState.nextDirection();
+            // TODO: リザルト画面へ
         }
 
-        if (buttleState.isButtleStart)
+        if (!buttleState.isGameEnd)
         {
             PlayerAction();
             EnemyAction();
-            if (buttleState.isGameClear)
+        }
+        /*
+        if (buttleState.isButtleStart && !buttleState.isGameEnd)
+        {
+            PlayerAction();
+            EnemyAction();
+            if (buttleState.isEnemyTurnEnd)
             {
-                // TODO: リザルト画面へ
+                buttleState.isPlayerTurn = true;
+                buttleState.isEnemyTurnEnd = false;
             }
 
-            if (buttleState.isGameOver)
+            if (buttleState.isPlayerTurnEnd)
             {
-                // TODO: リザルト画面へ
+                buttleState.isEnemyTurn = true;
+                buttleState.isPlayerTurnEnd = false;
+                buttleState.nextDirection();
             }
-        }
+
+         }
+         */
     }
 
     void CheckGameState()
     {
-        if (player.getMP() <= 0) buttleState.isGameOver = true;
-        if (enemy.getMP() <= 0) buttleState.isGameOver = true;
+        if (player.getMP() <= 0)
+        {
+            buttleState.isGameOver = true;
+            buttleState.isGameEnd = true;
+        }
+        if (enemy.getMP() <= 0)
+        {
+            buttleState.isGameClear = true;
+            buttleState.isGameEnd = true;
+        }
     }
 
     void TextUpdate()
@@ -92,10 +110,10 @@ public class ButtleManager : MonoBehaviour
             restTimeBar.value = 1 - (buttleState.time / buttleState.interval);
             Debug.Log(buttleState.directionType);
             // 初期化処理
-            if (!buttleState.isPlayerInit)
+            if (!player.init)
             {
                 buttleState.time = 0;
-                buttleState.isPlayerInit = true;
+                player.init = true;
             }
 
             buttleState.time += Time.deltaTime;
@@ -104,23 +122,27 @@ public class ButtleManager : MonoBehaviour
             {
                 if (PlayerInput.direction == buttleState.directionType)
                 {
-                    enemy.ApplyDamage(player.getAttack() * (1 + buttleState.combo * 0.1f));
+                    enemy.ApplyDamage(player.getAttack() * (1 + buttleState.combo * 0.05f));
                     buttleState.combo++;
                 } else
                 {
                     buttleState.combo = 0;
                     player.ApplyDamage();
                 }
-                buttleState.isPlayerTurnEnd = true;
-                buttleState.isPlayerInit = false;
+                buttleState.isPlayerTurn = false;
+                buttleState.isEnemyTurn = true;
+                buttleState.nextDirection();
+                player.init = false;
             }
 
             if (buttleState.time > buttleState.interval)
             {
                 buttleState.combo = 0;
                 player.ApplyDamage();
-                buttleState.isPlayerTurnEnd = true;
-                buttleState.isPlayerInit = false;
+                buttleState.isPlayerTurn= false;
+                buttleState.isEnemyTurn = true;
+                buttleState.nextDirection();
+                player.init = false;
             }
         }
     }
@@ -129,11 +151,23 @@ public class ButtleManager : MonoBehaviour
     {
         if (buttleState.isEnemyTurn)
         {
-            enemy.DoPosing(buttleState.directionType);
-            enemyStateText.text = buttleState.directionType.ToString();
-            // TODO; 敵のアニメーション
-            // TODO; 敵の音再生
-            buttleState.isEnemyTurnEnd = true;
+            Debug.Log("HOGE");
+            if (!enemy.init)
+            {
+                buttleState.enemyPosingTime = 0f;
+                enemy.init = true;
+                enemy.DoPosing(PlayerInput.DirectionType.IDLE);
+            }
+
+            buttleState.enemyPosingTime += Time.deltaTime;
+
+            if (buttleState.enemyPosingTime > 0.3f)
+            {
+                enemy.DoPosing(buttleState.directionType);
+                buttleState.isEnemyTurn = false;
+                buttleState.isPlayerTurn = true;
+                enemy.init = false;
+            }
         }
     }
 }

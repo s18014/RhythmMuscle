@@ -15,10 +15,13 @@ public class Player : MonoBehaviour
     bool isStart = false;
     float time;
     ButtleState buttleState;
+    PosingController posingController;
+    public bool init = false;
 
     private void Awake()
     {
         audio = GetComponent<AudioSource>();
+        posingController = GetComponent<PosingController>();
         buttleState = ButtleState.Instance;
         MP = MaxMP;
     }
@@ -55,12 +58,16 @@ public class Player : MonoBehaviour
         switch(direction)
         {
             case PlayerInput.DirectionType.UP:
+                posingController.Up();
                 break;
             case PlayerInput.DirectionType.DOWN:
+                posingController.Down();
                 break;
             case PlayerInput.DirectionType.RIGHT:
+                posingController.Right();
                 break;
             case PlayerInput.DirectionType.LEFT:
+                posingController.Left();
                 break;
             default:
                 break;

@@ -68,9 +68,15 @@ public class PlayerInput : MonoBehaviour
 
     void GetDirection ()
 	{
+        float distance = Vector3.Distance(touchStartPos, touchEndPos);
 		float directionX = touchEndPos.x - touchStartPos.x;
 		float directionY = touchEndPos.y - touchStartPos.y;
 		//xがｙより絶対値が大きい時。
+        if (distance <= 30f)
+        {
+            touched = true;
+            return;
+        }
 		if (Mathf.Abs (directionY) < Mathf.Abs (directionX)) {
 			if (30 < directionX) {
 				//右向きにフリック
