@@ -26,4 +26,14 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene("Battle");
     }
+
+    public void LoadOverScene()
+    {
+        SceneManager.LoadScene("over");
+    }
+
+    public void LoadClearScene()
+    {
+        SceneManager.LoadScene("clear");
+    }
 }

@@ -8,19 +8,20 @@ public class Enemy : MonoBehaviour
     [SerializeField] float MaxMP = 100f;
     [SerializeField] float recoveryPoint = 30f;
     [SerializeField] Slider MPBar;
+    [SerializeField] AudioClip huwa;
     int posingCount;
     float MP;
     bool isStart = false;
     float time;
     public bool init = false;
-    AudioSource audio;
+    AudioSource audioSource;
     ButtleState buttleState;
     PosingController posingController;
 
     private void Awake()
     {
         MP = MaxMP;
-        audio = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         buttleState = ButtleState.Instance;
         posingController = GetComponent<PosingController>();
     }
@@ -110,7 +111,11 @@ public class Enemy : MonoBehaviour
 
     public void DoPosing(PlayerInput.DirectionType direction)
     {
-        switch(direction)
+        if (PlayerInput.DirectionType.IDLE != PlayerInput.direction)
+        {
+            audioSource.PlayOneShot(huwa);
+        }
+        switch (direction)
         {
             case PlayerInput.DirectionType.UP:
                 posingController.Up();

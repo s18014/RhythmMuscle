@@ -44,11 +44,13 @@ public class ButtleManager : MonoBehaviour
         if (buttleState.isGameClear)
         {
             // TODO: リザルト画面へ
+            sceneLoader.LoadClearScene();
         }
 
         if (buttleState.isGameOver)
         {
             // TODO: リザルト画面へ
+            sceneLoader.LoadOverScene();
         }
 
         if (!buttleState.isGameEnd)

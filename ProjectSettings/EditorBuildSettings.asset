@@ -6,9 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/title.unity
+    guid: b47f1a7da2212bd42bcc9f521c741de7
+  - enabled: 1
     path: Assets/Scenes/Battle.unity
     guid: 99a193ca6ff894849a72a715c3e3498a
   - enabled: 1
-    path: Assets/Scenes/Title.unity
-    guid: b47f1a7da2212bd42bcc9f521c741de7
+    path: Assets/Scenes/asobika.unity
+    guid: 7953f9d3a22ade149acc0a3323635f98
+  - enabled: 1
+    path: Assets/Scenes/over.unity
+    guid: fcc8c27e2e0ab214aa69dfbee44a3c0d
+  - enabled: 1
+    path: Assets/Scenes/clear.unity
+    guid: 926706038f6c5e2499de3dcf7946bdb0
+  - enabled: 0
+    path: Assets/__DELETED_GUID_Trash/303f955098447cd4e96d059a2f1381fa
+    guid: 303f955098447cd4e96d059a2f1381fa
   m_configObjects: {}
