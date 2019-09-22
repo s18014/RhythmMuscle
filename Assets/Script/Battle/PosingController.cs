@@ -9,11 +9,9 @@ public class PosingController : MonoBehaviour
     [SerializeField] GameObject right;
     [SerializeField] GameObject left;
     [SerializeField] GameObject idle;
-    /*
     float endTime = 1f;
     float currentTime;
     bool isPosing = false;
-    */
 
     // Start is called before the first frame update
     void Start()
@@ -25,15 +23,33 @@ public class PosingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
+        updateState();
+        checkPosingState();
+    }
+
+    public void setEndTime(float endTime)
+    {
+        this.endTime = endTime;
+    }
+
+    void initPosingState()
+    {
+        isPosing = true;
+        currentTime = 0f;
+    }
+
+    void updateState()
+    {
+        currentTime += Time.deltaTime;
+    }
+
+    void checkPosingState()
+    {
         if (isPosing && currentTime < endTime)
         {
-            currentTime += Time.deltaTime;
             return;
         }
-
         Idle();
-        */
     }
 
     void allUnActive()
@@ -49,24 +65,28 @@ public class PosingController : MonoBehaviour
     {
         allUnActive();
         up.gameObject.SetActive(true);
+        initPosingState();
     }
 
     public void Down()
     {
         allUnActive();
         down.gameObject.SetActive(true);
+        initPosingState();
     }
 
     public void Right()
     {
         allUnActive();
         right.gameObject.SetActive(true);
+        initPosingState();
     }
 
     public void Left()
     {
         allUnActive();
         left.gameObject.SetActive(true);
+        initPosingState();
     }
 
     public void Idle()

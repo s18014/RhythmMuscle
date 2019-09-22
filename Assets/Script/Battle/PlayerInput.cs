@@ -5,22 +5,14 @@ using UnityEngine.UI;
 
 public class PlayerInput : MonoBehaviour
 {
-
-    public enum DirectionType
-    {
-        UP,
-        DOWN,
-        RIGHT,
-        LEFT,
-        IDLE
-    }
-    Vector3 touchStartPos;
-    Vector3 touchEndPos;
-    public static DirectionType direction
+    public static SwipeType swipeState
     {
         get;
         private set;
     }
+
+    Vector3 touchStartPos;
+    Vector3 touchEndPos;
 
     public static bool touched
     {
@@ -30,7 +22,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Awake()
     {
-        direction = DirectionType.IDLE;
+        swipeState = SwipeType.IDLE;
         touched = false;
     }
 
@@ -47,7 +39,7 @@ public class PlayerInput : MonoBehaviour
 
     void Flick()
     {
-        direction = DirectionType.IDLE;
+        swipeState = SwipeType.IDLE;
         touched = false;
      	if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -62,40 +54,40 @@ public class PlayerInput : MonoBehaviour
                     Input.mousePosition.y,
                     Input.mousePosition.z);
 
-                GetDirection();
+                GetswipeState();
             }
     }
 
-    void GetDirection ()
+    void GetswipeState ()
 	{
         float distance = Vector3.Distance(touchStartPos, touchEndPos);
-		float directionX = touchEndPos.x - touchStartPos.x;
-		float directionY = touchEndPos.y - touchStartPos.y;
+		float swipeStateX = touchEndPos.x - touchStartPos.x;
+		float swipeStateY = touchEndPos.y - touchStartPos.y;
 		//xがｙより絶対値が大きい時。
         if (distance <= 30f)
         {
             touched = true;
             return;
         }
-		if (Mathf.Abs (directionY) < Mathf.Abs (directionX)) {
-			if (30 < directionX) {
+		if (Mathf.Abs (swipeStateY) < Mathf.Abs (swipeStateX)) {
+			if (30 < swipeStateX) {
 				//右向きにフリック
-				direction = DirectionType.RIGHT;
+				swipeState = SwipeType.RIGHT;
 
 			} 
-			if (-30 > directionX) {
+			if (-30 > swipeStateX) {
 				//左向きにフリック
-				direction = DirectionType.LEFT;
+				swipeState = SwipeType.LEFT;
 			}
 			//yがxより絶対値が大きい時。
-		} else if (Mathf.Abs (directionX) < Mathf.Abs (directionY)) {
-			if (30 < directionY) {
+		} else if (Mathf.Abs (swipeStateX) < Mathf.Abs (swipeStateY)) {
+			if (30 < swipeStateY) {
 				//上向きにフリック
-				direction = DirectionType.UP;
+				swipeState = SwipeType.UP;
 			}
-			if (-30 > directionY) {
+			if (-30 > swipeStateY) {
 				//下向きのフリック
-				direction = DirectionType.DOWN;
+				swipeState = SwipeType.DOWN;
 			}
 		} else {
             //タッチを検出
