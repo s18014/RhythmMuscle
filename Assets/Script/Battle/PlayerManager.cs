@@ -19,9 +19,9 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PlayerInput.swipeState == SwipeType.UP)
+        if (PlayerInput.swipeState != SwipeType.IDLE)
         {
-            posingController.Up();
+            posingController.DoPosing(PlayerInput.swipeState);
         }
     }
 }

@@ -9,7 +9,8 @@ public class PosingController : MonoBehaviour
     [SerializeField] GameObject right;
     [SerializeField] GameObject left;
     [SerializeField] GameObject idle;
-    float endTime = 1f;
+    float idleTime = 0.1f;
+    float endTime = 0.1f;
     float currentTime;
     bool isPosing = false;
 
@@ -23,8 +24,8 @@ public class PosingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        updateState();
-        checkPosingState();
+        // updateState();
+        // checkPosingState();
     }
 
     public void setEndTime(float endTime)
@@ -61,37 +62,39 @@ public class PosingController : MonoBehaviour
         idle.gameObject.SetActive(false);
     }
 
-    public void Up()
+    public void DoPosing(SwipeType type)
     {
-        allUnActive();
-        up.gameObject.SetActive(true);
-        initPosingState();
-    }
-
-    public void Down()
-    {
-        allUnActive();
-        down.gameObject.SetActive(true);
-        initPosingState();
-    }
-
-    public void Right()
-    {
-        allUnActive();
-        right.gameObject.SetActive(true);
-        initPosingState();
-    }
-
-    public void Left()
-    {
-        allUnActive();
-        left.gameObject.SetActive(true);
-        initPosingState();
+        StartCoroutine("Posing", type);
     }
 
     public void Idle()
     {
         allUnActive();
         idle.gameObject.SetActive(true);
+    }
+
+    IEnumerator Posing(SwipeType type)
+    {
+        Idle();
+        yield return new WaitForSeconds(0.05f);
+        allUnActive();
+        switch(type)
+        {
+            case SwipeType.UP:
+                up.gameObject.SetActive(true);
+                break;
+            case SwipeType.DOWN:
+                down.gameObject.SetActive(true);
+                break;
+            case SwipeType.RIGHT:
+                right.gameObject.SetActive(true);
+                break;
+            case SwipeType.LEFT:
+                left.gameObject.SetActive(true);
+                break;
+            default:
+                idle.gameObject.SetActive(true);
+                break;
+        }
     }
 }
