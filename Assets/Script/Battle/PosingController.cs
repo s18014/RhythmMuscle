@@ -9,9 +9,8 @@ public class PosingController : MonoBehaviour
     [SerializeField] GameObject right;
     [SerializeField] GameObject left;
     [SerializeField] GameObject idle;
-    float idleTime = 0.1f;
-    float endTime = 0.1f;
-    float currentTime;
+    float posingTime = 0.7f;
+    float currentTime = 0f;
     bool isPosing = false;
 
     // Start is called before the first frame update
@@ -24,33 +23,15 @@ public class PosingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // updateState();
-        // checkPosingState();
-    }
-
-    public void setEndTime(float endTime)
-    {
-        this.endTime = endTime;
-    }
-
-    void initPosingState()
-    {
-        isPosing = true;
-        currentTime = 0f;
-    }
-
-    void updateState()
-    {
-        currentTime += Time.deltaTime;
-    }
-
-    void checkPosingState()
-    {
-        if (isPosing && currentTime < endTime)
+        if (isPosing)
         {
-            return;
+            currentTime += Time.deltaTime;
+            if (currentTime > posingTime)
+            {
+                Idle();
+                isPosing = false;
+            }
         }
-        Idle();
     }
 
     void allUnActive()
@@ -78,6 +59,11 @@ public class PosingController : MonoBehaviour
         Idle();
         yield return new WaitForSeconds(0.05f);
         allUnActive();
+        if (type != SwipeType.IDLE)
+        {
+            isPosing = true;
+            currentTime = 0f;
+        }
         switch(type)
         {
             case SwipeType.UP:

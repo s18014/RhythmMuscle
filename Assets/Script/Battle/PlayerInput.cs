@@ -63,12 +63,13 @@ public class PlayerInput : MonoBehaviour
         float distance = Vector3.Distance(touchStartPos, touchEndPos);
 		float swipeStateX = touchEndPos.x - touchStartPos.x;
 		float swipeStateY = touchEndPos.y - touchStartPos.y;
-		//xがｙより絶対値が大きい時。
+        // スワイプ距離が30f以下の場合はタップ判定
         if (distance <= 30f)
         {
             touched = true;
             return;
         }
+		//xがｙより絶対値が大きい時。
 		if (Mathf.Abs (swipeStateY) < Mathf.Abs (swipeStateX)) {
 			if (30 < swipeStateX) {
 				//右向きにフリック
